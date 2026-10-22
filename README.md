@@ -459,9 +459,7 @@ Google Colab can also be used for development and testing. However, hosting a pe
 
 Open a terminal and run:
 
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-
-Replace "YOUR_USERNAME" and "YOUR_REPOSITORY" with the actual GitHub username and repository name.
+git clone https://github.com/Prati126/Cricket-score-
 
 Move into the project directory:
 
