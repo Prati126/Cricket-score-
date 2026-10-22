@@ -649,3 +649,496 @@ Use parameterized SQL statements.
 Avoid duplicate records where uniqueness is required.
 Use transactions for related database changes.
 Maintain consistency between player and match information.
+📈 SQL Analytics
+
+The project specification requires at least 25 SQL queries covering easy, medium, and hard difficulty levels.
+
+The following are example analytical questions and queries that can be adapted to the actual schema.
+
+Easy-Level Queries
+
+1. Display all player records
+
+SELECT *
+FROM players;
+
+2. Display all match records
+
+SELECT *
+FROM matches;
+
+3. Find players from a specific team
+
+SELECT *
+FROM players
+WHERE team_name = 'India';
+
+4. Find players with more than 500 runs
+
+SELECT player_name, total_runs
+FROM players
+WHERE total_runs > 500;
+
+5. Sort players by total runs
+
+SELECT player_name, total_runs
+FROM players
+ORDER BY total_runs DESC;
+
+6. Find matches by status
+
+SELECT *
+FROM matches
+WHERE match_status = 'Completed';
+
+7. Count the total number of players
+
+SELECT COUNT(*) AS total_players
+FROM players;
+
+8. Count the total number of matches
+
+SELECT COUNT(*) AS total_matches
+FROM matches;
+
+9. Find players with at least 10 wickets
+
+SELECT player_name, wickets
+FROM players
+WHERE wickets >= 10;
+
+Medium-Level Queries
+
+10. Find the top five run scorers
+
+SELECT player_name, total_runs
+FROM players
+ORDER BY total_runs DESC
+LIMIT 5;
+
+11. Find the top five wicket takers
+
+SELECT player_name, wickets
+FROM players
+ORDER BY wickets DESC
+LIMIT 5;
+
+12. Calculate total runs by team
+
+SELECT team_name, SUM(total_runs) AS team_runs
+FROM players
+GROUP BY team_name;
+
+13. Calculate average runs by team
+
+SELECT team_name, AVG(total_runs) AS average_runs
+FROM players
+GROUP BY team_name;
+
+14. Find the highest individual run total
+
+SELECT MAX(total_runs) AS highest_runs
+FROM players;
+
+15. Find the player with the highest run total
+
+SELECT player_name, total_runs
+FROM players
+WHERE total_runs = (
+    SELECT MAX(total_runs)
+    FROM players
+);
+
+16. Find the highest wicket total
+
+SELECT MAX(wickets) AS highest_wickets
+FROM players;
+
+17. Count players in each team
+
+SELECT team_name, COUNT(*) AS player_count
+FROM players
+GROUP BY team_name;
+
+Hard-Level Queries
+
+18. Rank players by runs
+
+SELECT
+    player_name,
+    total_runs,
+    RANK() OVER (
+        ORDER BY total_runs DESC
+    ) AS run_rank
+FROM players;
+
+19. Rank players by wickets
+
+SELECT
+    player_name,
+    wickets,
+    DENSE_RANK() OVER (
+        ORDER BY wickets DESC
+    ) AS wicket_rank
+FROM players;
+
+20. Find teams with more than five recorded players
+
+SELECT team_name, COUNT(*) AS player_count
+FROM players
+GROUP BY team_name
+HAVING COUNT(*) > 5;
+
+21. Find players whose run totals exceed the overall average
+
+SELECT player_name, total_runs
+FROM players
+WHERE total_runs > (
+    SELECT AVG(total_runs)
+    FROM players
+);
+
+22. Find teams with the highest recorded total runs
+
+SELECT team_name, SUM(total_runs) AS team_runs
+FROM players
+GROUP BY team_name
+ORDER BY team_runs DESC;
+
+23. Display match details for a selected team
+
+SELECT *
+FROM matches
+WHERE team_one = 'India'
+   OR team_two = 'India';
+
+24. Count matches by format
+
+SELECT match_format, COUNT(*) AS match_count
+FROM matches
+GROUP BY match_format;
+
+25. Count matches by status
+
+SELECT match_status, COUNT(*) AS match_count
+FROM matches
+GROUP BY match_status;
+
+These queries are illustrative examples, not a guarantee that the application's SQL analytics module already contains 25 executable queries. Some SQL features, such as window functions, may require a compatible database version. Queries should be tested against the final schema before being demonstrated.
+
+✏️ CRUD Operations
+
+CRUD stands for Create, Read, Update, and Delete.
+
+Create
+
+Allows users to add a new player or match record.
+
+Expected validation:
+
+Required fields must not be empty.
+
+Numeric values must be valid.
+
+Unique identifiers must not conflict.
+
+Relationships must satisfy database constraints.
+
+Read
+
+Allows users to view existing records.
+
+Potential capabilities:
+
+Display all records.
+
+Search by name or identifier.
+
+Filter by team.
+
+Sort by selected fields.
+
+Update
+
+Allows users to modify an existing record.
+
+The application should identify the selected record and validate the new values before saving changes.
+
+Delete
+
+Allows users to remove a selected record.
+
+Deletion should target the intended record only. Confirmation and appropriate relationship handling are recommended.
+
+Database safety: User input should be passed through parameterized SQL statements rather than concatenated directly into SQL commands.
+
+🖥️ Dashboard User Guide
+
+Home Page
+
+Start with the project overview and use the available navigation to access the different sections.
+
+Live Match Page
+
+Open the Live Match section to view the match data available from the configured data source. Use refresh controls if they are provided.
+
+Player Statistics Page
+
+Open the player statistics section to explore available batting and bowling records. Use the available filters to narrow down results.
+
+SQL Analytics Page
+
+Select an analytical query and review its result. Confirm that the selected query is compatible with the configured database.
+
+CRUD Page
+
+Use the available form controls to create, read, update, or delete supported records.
+
+Search and Filters
+
+Enter a search term or select a filter to narrow down the displayed records. Results depend on the data currently loaded into the dashboard.
+
+🛡️ Error Handling
+
+A reliable dashboard should handle common failures gracefully.
+
+Recommended practices include:
+
+Checking API response status codes.
+
+Setting HTTP request timeouts.
+
+Handling missing or malformed JSON fields.
+
+Validating database connection status.
+
+Catching database exceptions.
+
+Validating user input.
+
+Displaying understandable error messages.
+
+Logging technical details for debugging without exposing secrets.
+
+Avoiding repeated API requests when rate limits are reached.
+
+Clearly distinguishing live data from sample data.
+
+For example, if the external API is unavailable, the dashboard should explain that live information could not be retrieved instead of silently presenting sample records as current scores.
+
+🔐 Security Considerations
+
+Security is important when working with external APIs and databases.
+
+Never commit API keys, access tokens, or database passwords.
+
+Use environment variables or a platform-supported secret manager.
+
+Keep sensitive configuration files out of version control.
+
+Use .gitignore to exclude .env, virtual environments, and temporary files.
+
+Use parameterized SQL queries.
+
+Validate and sanitize user input.
+
+Restrict database access to the permissions the application requires.
+
+Avoid displaying sensitive credentials in error messages.
+
+Follow the cricket API provider's terms of use and rate limits.
+
+Review dependencies and update them when appropriate.
+
+If a secret has already been uploaded publicly, remove it from the repository and rotate or revoke it through the provider.
+
+🧪 Testing and Validation
+
+Testing helps ensure that the application behaves correctly under normal and error conditions.
+
+API Testing
+
+Verify the configured endpoint.
+
+Check successful responses.
+
+Test missing or invalid credentials.
+
+Test unavailable endpoints.
+
+Validate JSON structure and required fields.
+
+Confirm that API failures are reported correctly.
+
+Database Testing
+
+Verify table creation.
+
+Insert valid sample records.
+
+Read and filter records.
+
+Update existing records.
+
+Delete selected records.
+
+Test invalid inputs and duplicate identifiers.
+
+Dashboard Testing
+
+Confirm that navigation works.
+
+Check search and filtering behaviour.
+
+Verify that tables display the expected records.
+
+Test refresh functionality, if implemented.
+
+Check the application when no records are available.
+
+Test the layout at different browser sizes.
+
+SQL Testing
+
+Execute the predefined queries against the actual schema.
+
+Verify aggregate calculations.
+
+Check filtering and sorting results.
+
+Validate joins and subqueries.
+
+Confirm that the analytical results match the underlying data.
+
+⚠️ Current Limitations
+
+The behaviour of the application depends on the code, API permissions, and database configuration.
+
+Potential limitations include:
+
+Live match data requires a working API endpoint and suitable access permissions.
+
+Some API subscription plans may restrict endpoints or available fields.
+
+Sample data may be used during development when live API access is unavailable.
+
+Player statistics depend on the completeness and accuracy of the source data.
+
+SQL analytics require a configured database and compatible schema.
+
+CRUD operations require a functioning database connection.
+
+Automatic refresh behaviour depends on the implemented refresh mechanism.
+
+Public deployment requires appropriate hosting and configuration.
+
+These limitations should be updated to reflect the actual status of the submitted application.
+
+🚀 Future Enhancements
+
+Possible future improvements include:
+
+Integrating a verified cricket API with the required permissions.
+
+Improving live-score refresh behaviour.
+
+Adding additional match formats and competition filters.
+
+Expanding batting and bowling statistics.
+
+Adding interactive player comparison charts.
+
+Improving the SQL analytics interface.
+
+Adding further advanced SQL queries.
+
+Improving CRUD validation and database constraints.
+
+Adding unit tests and integration tests.
+
+Improving responsive design for mobile and desktop.
+
+Adding caching to reduce unnecessary API calls.
+
+Improving loading indicators and error messages.
+
+Deploying the application to a suitable hosting platform.
+
+Adding database backup and recovery procedures.
+
+Providing a project demonstration video.
+
+Improving documentation and installation instructions.
+
+🎓 Learning Outcomes
+
+This project provides an opportunity to develop practical skills in:
+
+Python programming.
+
+REST API integration.
+
+HTTP requests and response handling.
+
+JSON parsing and data validation.
+
+SQL queries and relational database concepts.
+
+Data processing with Pandas.
+
+Interactive dashboard development.
+
+Data visualization.
+
+CRUD application design.
+
+Exception handling and debugging.
+
+Git and GitHub version control.
+
+Technical documentation.
+
+Software project organization.
+
+🤝 Contributing
+
+Contributions and suggestions are welcome.
+
+To propose an improvement:
+
+Fork the repository.
+
+Create a separate branch.
+
+Implement the proposed change.
+
+Test the changes locally.
+
+Commit your changes with a descriptive message.
+
+Open a pull request describing the improvement.
+
+Please avoid including API credentials, passwords, or other sensitive information in contributions.
+
+
+
+This project can be distributed under the MIT License if that license is selected for the repository.
+
+
+👨‍💻 Author
+
+Project: Cricbuzz LiveStats — Real-Time Cricket Insights & SQL-Based Analytics
+
+Repository: https://github.com/Prati126/Cricket-score-
+
+For questions, suggestions, or project-related discussions, please use the repository's Issues section.
+
+⭐ Acknowledgements
+
+This project is developed for learning and demonstrating concepts related to Python application development, cricket data integration, SQL-based analytics, and interactive dashboard design.
+
+Cricket data availability depends on the configured API provider and its applicable access terms.
+
+If you find this project useful, consider giving the repository a star on GitHub.
+
+
