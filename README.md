@@ -2,6 +2,8 @@
 
 A Comprehensive Cricket Dashboard for Live Scores, Player Statistics, Match Insights, and SQL-Based Analytics
 
+website url - https://flagship-fencing-those.ngrok-free.dev/
+
 "Python" (https://img.shields.io/badge/Python-3.10%2B-blue)
 "API" (https://img.shields.io/badge/API-REST%20API-orange)
 "Data" (https://img.shields.io/badge/Data-JSON-green)
